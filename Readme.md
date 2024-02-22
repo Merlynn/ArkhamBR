@@ -1,7 +1,10 @@
-Project of tools to assist in the translation of ArkhamDB and ArkhamCards
+<h1>ArkhamBR</h1>
 
-Requirements:
+Project to development a tools set to assist in the translation of ArkhamDB and ArkhamCards </br></br>
 
-Spreadsheet.py
+
+<b>Requirements:</b>
+
+<i>Spreadsheet.py</i>
 - openpyxl
 - pandas
