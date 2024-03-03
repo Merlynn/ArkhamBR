@@ -1,23 +1,46 @@
 import pandas as pd
+import json
 import os
 
 
 ###############################################################
-directory="/home/merlynn/Development/Arkham/ArkhamBR/tmp/"
-json_path="/home/merlynn/Development/Arkham/ArkhamBR/tmp/saida/"
-sheet_path="/home/merlynn/Development/Arkham/ArkhamBR/tmp/core.xlsx"
+DIR=os.getcwd()
+directory=f"{DIR}/tmp/"
+json_path=f"{DIR}/tmp/saida/"
+sheet_path=f"{DIR}/tmp/_dwl.xlsx"
+
+def tp(var):
+    print(type(var))
+    quit()
+
 
 ###############################################################
 def sheet2json():
-    # Load Excel to DataFrame
+    # Carrega Excel para Dataframe
     df = pd.read_excel(sheet_path, engine='openpyxl', sheet_name=None)
 
     for sheet_name, sheet in df.items():
         print("-------------------------------")
         # Convert DataFrame to JSON
         print(sheet_name)
-        json_data = df[sheet_name].to_json(orient='records', indent=4, )
-        # Write JSON data to a file
+
+        sheet_json = pd.DataFrame(sheet)
+
+        # Removendo coluna 'status'
+        if 'status' in sheet_json:
+            sheet_json = df[sheet_name].drop(['status'], axis=1)
+
+        # Fix 5 digitos para 'code'
+        if 'code' in sheet_json:
+            sheet_json['code'] = sheet_json['code'].map(lambda x: f'{x:0>5}')
+            #pass
+
+        # Drop valores NaN
+        sheet_json = sheet_json.apply(lambda x: [x.dropna()], axis=1)
+
+        json_data = sheet_json.to_json(indent=4)
+
+        # Gravar Json no arquivo
         with open(json_path+sheet_name+".json", 'w') as json_file:
             json_file.write(json_data)
 
