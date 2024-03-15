@@ -1,0 +1,2 @@
+Rodar python na venv
+pip install pyarrow
