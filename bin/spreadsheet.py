@@ -5,9 +5,9 @@ import os
 
 ###############################################################
 DIR=os.getcwd()
-directory=f"{DIR}/tmp/"
-json_path=f"{DIR}/tmp/saida/"
-sheet_path=f"{DIR}/tmp/_dwl.xlsx"
+directory=f"{DIR}\\tmp\\ptc\\"
+json_path=f"{DIR}\\tmp\\saida\\"
+sheet_path=f"{DIR}\\tmp\\ptc.xlsx"
 
 def tp(var):
     print(type(var))
@@ -53,10 +53,10 @@ def json2sheet():
             df = pd.read_json(filename.path)
 
             with pd.ExcelWriter(sheet_path, engine="openpyxl", mode="a") as writer:
-                df.to_excel(writer, sheet_name=filename.name[:-5], index=False)
+                df.to_excel(writer, sheet_name=filename.name[:-5], index=False, )
 
 ###############################################################
 
-sheet2json()
+#sheet2json()
 
-#json2sheet()
+json2sheet()
