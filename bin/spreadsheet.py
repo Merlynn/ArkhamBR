@@ -1,30 +1,37 @@
 import pandas as pd
-import json
 import os
 import openpyxl
 
 
 ###############################################################
 EXP="eoe"
-DIR=f"{os.getcwd()}/tmp/{EXP}/"
+DIR=f"{os.getcwd()}/tmp/"
 
-directory=f"{DIR}"
-json_path=f"{DIR}saida/"
-sheet_path=f"{DIR}_{EXP}.xlsx"
+directory_in=f"{DIR}Download/pack/{EXP}/"
+directory_out=f"{DIR}saida/{EXP}/"
 
-def tp(var):
-    print(type(var))
+if not os.path.exists(directory_in):
+    os.makedirs(directory_in)
+if not os.path.exists(directory_out):
+    os.makedirs(directory_out)
+
+def pq(var):
+    from pprint import pprint
+    pprint(var)
     quit()
 
 
-###############################################################
+############################################################
+# Transforma as planilhas (PT) em Json traduzidos (PT)
 def sheet2json():
+    json_path=f"{directory_out}"
+    sheet_path=f"{directory_in}_{EXP}.xlsx"
+
     # Carrega Excel para Dataframe
     df = pd.read_excel(sheet_path, engine='openpyxl', sheet_name=None)
 
     for sheet_name, sheet in df.items():
         print("-------------------------------")
-        # Convert DataFrame to JSON
         print(sheet_name)
 
         sheet_json = pd.DataFrame(sheet)
@@ -47,15 +54,19 @@ def sheet2json():
         with open(json_path+sheet_name+".json", 'w+') as json_file:
             json_file.write(json_data)
 
-
+############################################################
+# Converte os Json (EN) nas planilhas para traduzir (PT)
 def json2sheet():
+    # planilha gerada com os json
+    sheet_path=f"{directory_out}_{EXP}.xlsx"
+
     # Verifica se existe planilha antes de processar
-    if os.path.isfile(sheet_path) == False:
+    if not os.path.isfile(sheet_path):
         openpyxl.Workbook().save(sheet_path)
 
     # Varre diretorio em busca dos arquivos
-    for filename in os.scandir(directory):
-        if filename.is_file():
+    for filename in os.scandir(directory_in):
+        if filename.is_file(): # and filename.endswith(".json")
             print("------------------------------")
             print(filename.name)
             df = pd.read_json(filename.path)
@@ -64,8 +75,17 @@ def json2sheet():
             with pd.ExcelWriter(sheet_path, engine="openpyxl", mode="a") as writer:
                 df.to_excel(writer, sheet_name=filename.name[:-5], index=False, )
 
+
+
 ###############################################################
-
-#sheet2json()
-
-json2sheet()
+print("O que deseja gerar:")
+print("1) Planilha para traduzir")
+print("2) JSON traduzidos")
+match input():
+    case "1" :
+        json2sheet()
+    case "2" :
+        sheet2json()
+    case _:
+        print("Opção invalida")
+        quit()

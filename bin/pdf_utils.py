@@ -1,6 +1,7 @@
 import PyPDF2
 import os
 
+# TO DO: Fix directorie
 DIR="D:\\Users\\PMMG\\Desktop\\drive-download-20240305T132653Z-001\\Guia de Campanha\\EN\\"
 
 directory = os.fsencode(DIR)
