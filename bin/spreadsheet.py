@@ -4,7 +4,7 @@ import openpyxl
 
 
 ###############################################################
-EXP="eoe"
+EXP="tcu"
 DIR=f"{os.getcwd()}/tmp/"
 
 directory_in=f"{DIR}Download/pack/{EXP}/"
